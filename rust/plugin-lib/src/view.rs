@@ -145,6 +145,13 @@ impl<C: Cache> View<C> {
         self.cache.offset_of_line(&ctx, line_num)
     }
 
+    pub fn offset_to_line_col(&mut self, offset: usize) -> Result<(usize, usize), Error> {
+        let line = self.line_of_offset(offset)?;
+        let offset_of_line = self.offset_of_line(line)?;
+        Ok((line, offset - offset_of_line))
+    }
+
+    
     pub fn line_of_offset(&mut self, offset: usize) -> Result<usize, Error> {
         let ctx = self.make_ctx();
         self.cache.line_of_offset(&ctx, offset)
